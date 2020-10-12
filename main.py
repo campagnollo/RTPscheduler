@@ -4,13 +4,13 @@ import random
 from datetime import date
 from datetime import timedelta
 import xml.etree.ElementTree as et
-while True:
-    try:
-        import openpyxl
-        break
-    except ModuleNotFoundError as e:
-            import pip
-            subprocess.check_call([sys.executable, "-m", "pip", "install", e.name])
+
+try:
+    import openpyxl
+except ModuleNotFoundError as e:
+    print("Run 'pip3 install openpyxl' to run this program")
+    exit()
+
 
 def main():
     group = []
