@@ -8,7 +8,7 @@ import xml.etree.ElementTree as et
 try:
     import openpyxl
 except ModuleNotFoundError as e:
-    print("Run 'pip3 install openpyxl' to run this program")
+    print("Openpyxl module missing. Run 'pip3 install openpyxl' to run this program again")
     exit()
 
 
