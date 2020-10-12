@@ -1,5 +1,4 @@
 import sys
-import subprocess
 import random
 from datetime import date
 from datetime import timedelta
@@ -8,7 +7,7 @@ import xml.etree.ElementTree as et
 try:
     import openpyxl
 except ModuleNotFoundError as e:
-    print("Openpyxl module missing. Run 'pip3 install openpyxl' to run this program again")
+    print("Run 'pip3 install openpyxl' to run this program")
     exit()
 
 
@@ -17,7 +16,11 @@ def main():
     week = []
     nextMonday=str(date.today()+timedelta(days=(7-date.today().weekday())))
     DAYSOFWEEK=('Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday')
-    engtree=et.parse("MESS_list.xml")
+    try:
+        engtree=et.parse("MESS_list.xml")
+    except FileNotFoundError:
+        print("Unable to locate 'MESS_list.xml' file.")
+        exit()
     engroot=engtree.getroot()
 
     for child in engroot.findall("Eng"):
@@ -53,5 +56,10 @@ def main():
     wb.save(nextMonday+".xlsx")
 
 if __name__ == '__main__':
+    try:
+        assert sys.version_info[0]>=3
+    except AssertionError:
+        print("Incorrect interpreter being run. Please use Python 3.x or higher")
+        exit()
     main()
 
