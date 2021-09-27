@@ -25,8 +25,7 @@ def main():
 
     for child in engroot.findall("Eng"):
         id=child.attrib
-        if child[2].text=='RTP' and child[1].text != 'CP':
-            #print(id['CEC'])
+        if child[2].text=='RTP' and child[1].text != 'CP': #'CP' is cherry picker, new person
             group.append((id['CEC'],child[0].text,child[1].text,child[2].text))
 
 
