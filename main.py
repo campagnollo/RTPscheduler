@@ -12,7 +12,7 @@ except ModuleNotFoundError as e:
 
 
 def main():
-    group = []
+    group = [] #Engineering team
     week = []
     nextMonday=str(date.today()+timedelta(days=(7-date.today().weekday())))
     DAYSOFWEEK=('Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday')
