@@ -8,6 +8,9 @@ import xml.etree.ElementTree as et
 name = 'openpyxl'
 
 
+"""
+if openpyxl is not installed, install the package
+"""
 
 if name in sys.modules:
     pass
@@ -24,6 +27,10 @@ except ModuleNotFoundError as e:
 
 
 def main():
+    """
+    Creates the following week's schedule for the team.
+    :return:
+    """
     group = []  # Engineering team
     week = []
     nextMonday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
@@ -52,6 +59,10 @@ def main():
     r = 1
     c = 1
     for day, cday in zip(week, DAYSOFWEEK):
+        """
+        day is the people working, cday is the day of the week
+        """
+
         sheet.cell(row=r, column=c, value=cday)
         r += 1
         for person in day:
