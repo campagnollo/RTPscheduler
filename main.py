@@ -1,4 +1,5 @@
 import sys
+import os.path
 import random
 import importlib.util
 from datetime import date
@@ -23,11 +24,7 @@ def main():
 
 
 def worker_list_loader():
-    try:
-        engineer_tree = et.parse("MESS_list.xml")
-    except FileNotFoundError:
-        print("Unable to locate 'MESS_list.xml' file.")
-        exit()
+    engineer_tree = et.parse("MESS_list.xml")
     engineer_root = engineer_tree.getroot()
     return engineer_root
 
@@ -85,6 +82,11 @@ if __name__ == '__main__':
         assert sys.version_info[0] >= 3
     except AssertionError:
         print("Incorrect interpreter being run. Please use Python 3.x or higher")
+        exit()
+    try:
+        assert os.path.isfile("MESS_list.xml")
+    except AssertionError:
+        print("Excel MESS file not found")
         exit()
     try:
         openpyxl_checker()
