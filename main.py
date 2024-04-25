@@ -7,7 +7,6 @@ import xml.etree.ElementTree as et
 
 name = 'openpyxl'
 
-
 """
 if openpyxl is not installed, install the package
 """
@@ -31,50 +30,62 @@ def main():
     Creates the following week's schedule for the team.
     :return:
     """
-    group = []  # Engineering team
+    engineering_team = []
     week = []
-    nextMonday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
+    next_Monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
     DAYSOFWEEK = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
     try:
-        engtree = et.parse("MESS_list.xml")
+        engineer_tree = et.parse("MESS_list.xml")
     except FileNotFoundError:
         print("Unable to locate 'MESS_list.xml' file.")
         exit()
-    engroot = engtree.getroot()
+    engineer_root = engineer_tree.getroot()
 
-    for child in engroot.findall("Eng"):
+    engineering_team = schedule_builder(engineer_root, engineering_team)
+
+    week = schedule_randomizer(engineering_team, week)
+
+    workbook = excel_writer(DAYSOFWEEK, next_Monday, week)
+
+    workbook.save(next_Monday + ".xlsx")
+
+
+def schedule_randomizer(engineering_team, week):
+    random.shuffle(engineering_team)
+    for i in range(5):
+        week.insert(i, engineering_team[:])
+        random.shuffle(engineering_team)
+    return week
+
+
+def excel_writer(DAYSOFWEEK, next_Monday, week):
+    workbook = openpyxl.Workbook()
+    sheet = workbook["Sheet"]
+    sheet.title = next_Monday
+    workday = []
+    row = 1
+    column = 1
+    for workers_of_the_day, day_of_week in zip(week, DAYSOFWEEK):
+
+        sheet.cell(row=row, column=column, value=day_of_week)
+        row += 1
+        for person in workers_of_the_day:
+            workday.append(str(person[1]) + "(" + str(person[0]) + ")" + str(person[2]))
+        for i in workday:
+            sheet.cell(row=row, column=column, value=i)
+            row += 1
+        row = 1
+        column += 2
+        workday = []
+    return workbook
+
+
+def schedule_builder(engineer_root, group):
+    for child in engineer_root.findall("Eng"):
         id = child.attrib
         if child[2].text == 'RTP' and child[1].text != 'CP':  # 'CP' is cherry picker, new person
             group.append((id['CEC'], child[0].text, child[1].text, child[2].text))
-
-    random.shuffle(group)
-    for i in range(5):
-        week.insert(i, group[:])
-        random.shuffle(group)
-
-    wb = openpyxl.Workbook()
-    sheet = wb["Sheet"]
-    sheet.title = nextMonday
-    workday = []
-    r = 1
-    c = 1
-    for day, cday in zip(week, DAYSOFWEEK):
-        """
-        day is the people working, cday is the day of the week
-        """
-
-        sheet.cell(row=r, column=c, value=cday)
-        r += 1
-        for person in day:
-            workday.append(str(person[1]) + "(" + str(person[0]) + ")" + str(person[2]))
-        for i in workday:
-            sheet.cell(row=r, column=c, value=i)
-            r += 1
-        r = 1
-        c += 2
-        workday = []
-
-    wb.save(nextMonday + ".xlsx")
+    return group
 
 
 if __name__ == '__main__':
