@@ -34,12 +34,8 @@ def main():
     week = []
     next_Monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
     DAYSOFWEEK = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
-    try:
-        engineer_tree = et.parse("MESS_list.xml")
-    except FileNotFoundError:
-        print("Unable to locate 'MESS_list.xml' file.")
-        exit()
-    engineer_root = engineer_tree.getroot()
+
+    engineer_root = worker_list_loader()
 
     engineering_team = schedule_builder(engineer_root, engineering_team)
 
@@ -48,6 +44,16 @@ def main():
     workbook = excel_writer(DAYSOFWEEK, next_Monday, week)
 
     workbook.save(next_Monday + ".xlsx")
+
+
+def worker_list_loader():
+    try:
+        engineer_tree = et.parse("MESS_list.xml")
+    except FileNotFoundError:
+        print("Unable to locate 'MESS_list.xml' file.")
+        exit()
+    engineer_root = engineer_tree.getroot()
+    return engineer_root
 
 
 def schedule_randomizer(engineering_team, week):
