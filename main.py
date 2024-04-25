@@ -7,11 +7,6 @@ import xml.etree.ElementTree as et
 
 
 
-"""
-if openpyxl is not installed, install the package
-"""
-
-
 def openpyxl_checker():
     name = 'openpyxl'
     if name in sys.modules:
