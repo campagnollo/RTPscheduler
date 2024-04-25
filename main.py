@@ -70,7 +70,7 @@ if __name__ == '__main__':
     try:
         assert sys.version_info[0] >= 3, "Incorrect interpreter being run. Please use Python 3.x or higher"
         assert os.path.isfile("MESS_list.xml")
-    except (AssertionError) as e:
+    except AssertionError as e:
         print(e)
         exit()
     main()
