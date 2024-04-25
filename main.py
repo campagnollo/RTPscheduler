@@ -5,24 +5,27 @@ from datetime import date
 from datetime import timedelta
 import xml.etree.ElementTree as et
 
-name = 'openpyxl'
+
 
 """
 if openpyxl is not installed, install the package
 """
 
-if name in sys.modules:
-    pass
-elif (spec := importlib.util.find_spec(name)) is not None:
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
 
-try:
+def openpyxl_checker():
+    name = 'openpyxl'
+    if name in sys.modules:
+        pass
+    elif (spec := importlib.util.find_spec(name)) is not None:
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
     import openpyxl
-except ModuleNotFoundError as e:
-    print("Run 'pip3 install openpyxl' to run this program")
-    exit()
+
+
+
+
+
 
 
 def main():
@@ -96,5 +99,10 @@ if __name__ == '__main__':
         assert sys.version_info[0] >= 3
     except AssertionError:
         print("Incorrect interpreter being run. Please use Python 3.x or higher")
+        exit()
+    try:
+        openpyxl_checker()
+    except ModuleNotFoundError as e:
+        print("Run 'pip3 install openpyxl' to run this program")
         exit()
     main()
