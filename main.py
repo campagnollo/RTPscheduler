@@ -5,26 +5,7 @@ from datetime import date
 from datetime import timedelta
 import xml.etree.ElementTree as et
 
-
-
-def openpyxl_checker():
-    name = 'openpyxl'
-    if name in sys.modules:
-        pass
-    elif (spec := importlib.util.find_spec(name)) is not None:
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        spec.loader.exec_module(module)
-    import openpyxl
-
-
-
-
-
-
-
 def main():
-
     engineering_team = []
     week = []
     next_Monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
@@ -67,7 +48,6 @@ def excel_writer(DAYSOFWEEK, next_Monday, week):
     row = 1
     column = 1
     for workers_of_the_day, day_of_week in zip(week, DAYSOFWEEK):
-
         sheet.cell(row=row, column=column, value=day_of_week)
         row += 1
         for person in workers_of_the_day:
@@ -79,6 +59,17 @@ def excel_writer(DAYSOFWEEK, next_Monday, week):
         column += 2
         workday = []
     return workbook
+
+
+def openpyxl_checker():
+    name = 'openpyxl'
+    if name in sys.modules:
+        pass
+    elif (spec := importlib.util.find_spec(name)) is not None:
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+    import openpyxl
 
 
 def schedule_builder(engineer_root, group):
