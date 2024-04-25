@@ -26,10 +26,7 @@ except ModuleNotFoundError as e:
 
 
 def main():
-    """
-    Creates the following week's schedule for the team.
-    :return:
-    """
+
     engineering_team = []
     week = []
     next_Monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
