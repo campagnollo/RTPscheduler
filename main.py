@@ -5,6 +5,7 @@ import importlib.util
 from datetime import date
 from datetime import timedelta
 import xml.etree.ElementTree as et
+import openpyxl
 
 def main():
     engineering_team = []
@@ -57,18 +58,6 @@ def excel_writer(DAYSOFWEEK, next_Monday, week):
         workday = []
     return workbook
 
-
-def openpyxl_checker():
-    name = 'openpyxl'
-    if name in sys.modules:
-        pass
-    elif (spec := importlib.util.find_spec(name)) is not None:
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        spec.loader.exec_module(module)
-    import openpyxl
-
-
 def schedule_builder(engineer_root, group):
     for child in engineer_root.findall("Eng"):
         id = child.attrib
@@ -79,18 +68,9 @@ def schedule_builder(engineer_root, group):
 
 if __name__ == '__main__':
     try:
-        assert sys.version_info[0] >= 3
-    except AssertionError:
-        print("Incorrect interpreter being run. Please use Python 3.x or higher")
-        exit()
-    try:
+        assert sys.version_info[0] >= 3, "Incorrect interpreter being run. Please use Python 3.x or higher"
         assert os.path.isfile("MESS_list.xml")
-    except AssertionError:
-        print("Excel MESS file not found")
-        exit()
-    try:
-        openpyxl_checker()
-    except ModuleNotFoundError as e:
-        print("Run 'pip3 install openpyxl' to run this program")
+    except (AssertionError) as e:
+        print(e)
         exit()
     main()
