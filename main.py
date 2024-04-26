@@ -25,8 +25,7 @@ def main():
 
 def worker_list_loader():
     engineer_tree = et.parse("MESS_list.xml")
-    engineer_root = engineer_tree.getroot()
-    return engineer_root
+    return engineer_tree.getroot()
 
 
 def schedule_randomizer(engineering_team, week):
