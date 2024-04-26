@@ -1,7 +1,6 @@
 import sys
 import os.path
 import random
-import importlib.util
 from datetime import timedelta, date
 import xml.etree.ElementTree as et
 import openpyxl
