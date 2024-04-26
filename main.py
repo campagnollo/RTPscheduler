@@ -2,16 +2,16 @@ import sys
 import os.path
 import random
 import importlib.util
-from datetime import date
-from datetime import timedelta
+from datetime import timedelta, date
 import xml.etree.ElementTree as et
 import openpyxl
+
 
 def main():
     engineering_team = []
     week = []
-    next_Monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
-    DAYSOFWEEK = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+    next_monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
+    DAYS_OF_WEEK = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
 
     engineer_root = worker_list_loader()
 
@@ -19,9 +19,9 @@ def main():
 
     week = schedule_randomizer(engineering_team, week)
 
-    workbook = excel_writer(DAYSOFWEEK, next_Monday, week)
+    workbook = excel_writer(DAYS_OF_WEEK, next_monday, week)
 
-    workbook.save(next_Monday + ".xlsx")
+    workbook.save(next_monday + ".xlsx")
 
 
 def worker_list_loader():
@@ -38,14 +38,14 @@ def schedule_randomizer(engineering_team, week):
     return week
 
 
-def excel_writer(DAYSOFWEEK, next_Monday, week):
+def excel_writer(DAYS_OF_WEEK, next_monday, week):
     workbook = openpyxl.Workbook()
     sheet = workbook["Sheet"]
-    sheet.title = next_Monday
+    sheet.title = next_monday
     workday = []
     row = 1
     column = 1
-    for workers_of_the_day, day_of_week in zip(week, DAYSOFWEEK):
+    for workers_of_the_day, day_of_week in zip(week, DAYS_OF_WEEK):
         sheet.cell(row=row, column=column, value=day_of_week)
         row += 1
         for person in workers_of_the_day:
@@ -57,6 +57,7 @@ def excel_writer(DAYSOFWEEK, next_Monday, week):
         column += 2
         workday = []
     return workbook
+
 
 def schedule_builder(engineer_root, group):
     for child in engineer_root.findall("Eng"):
