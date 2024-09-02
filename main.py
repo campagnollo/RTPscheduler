@@ -7,6 +7,10 @@ import openpyxl
 
 
 def main():
+    """
+        Main function to build the schedule for the engineering team for the week.
+        It loads the worker list, builds the schedule, randomizes it, writes it to an Excel file, and saves the file.
+    """
     engineering_team = []
     week = []
     next_monday = str(date.today() + timedelta(days=(7 - date.today().weekday())))
@@ -24,11 +28,23 @@ def main():
 
 
 def worker_list_loader():
+    """
+        Load the worker list from an XML file.
+        Returns the root of the XML tree.
+    """
     engineer_tree = et.parse("MESS_list.xml")
     return engineer_tree.getroot()
 
 
 def schedule_randomizer(engineering_team, week):
+    """
+        Randomize the schedule for the engineering team for the week.
+        Args:
+            engineering_team (list): The list of engineers.
+            week (list): The list representing the week.
+        Returns:
+            week (list): The randomized week schedule.
+    """
     random.shuffle(engineering_team)
     for i in range(5):
         week.insert(i, engineering_team[:])
@@ -37,6 +53,15 @@ def schedule_randomizer(engineering_team, week):
 
 
 def excel_writer(DAYS_OF_WEEK, next_monday, week):
+    """
+        Write the schedule to an Excel file.
+        Args:
+            DAYS_OF_WEEK (tuple): The days of the week.
+            next_monday (str): The date of the next Monday.
+            week (list): The week schedule.
+        Returns:
+            workbook (Workbook): The Excel workbook.
+    """
     workbook = openpyxl.Workbook()
     sheet = workbook["Sheet"]
     sheet.title = next_monday
@@ -58,6 +83,14 @@ def excel_writer(DAYS_OF_WEEK, next_monday, week):
 
 
 def schedule_builder(engineer_root, group):
+    """
+        Build the schedule for the engineering team.
+        Args:
+            engineer_root (Element): The root of the XML tree.
+            group (list): The list of engineers.
+        Returns:
+            group (list): The list of engineers.
+    """
     for child in engineer_root.findall("Eng"):
         id = child.attrib
         if child[2].text == 'RTP' and child[1].text != 'CP':  # 'CP' is cherry picker, new person
